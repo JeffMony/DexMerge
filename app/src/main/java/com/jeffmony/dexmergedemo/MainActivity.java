@@ -1,4 +1,4 @@
-package com.jeffmony.dexmergelib;
+package com.jeffmony.dexmergedemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
