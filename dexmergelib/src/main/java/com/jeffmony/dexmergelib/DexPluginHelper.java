@@ -25,20 +25,17 @@ public class DexPluginHelper {
     private static String apkFilePath = "";
     private static Resources sPluginResources;
 
-    public static void loadPlugin(Context context, ClassLoader hostClassLoader)
-            throws Exception {
+    public static void loadPlugin(Context context, ClassLoader hostClassLoader) throws Exception {
         loadPluginClass(context, hostClassLoader);
         initPluginResource(context);
         Toast.makeText(context, "插件加载成功", Toast.LENGTH_SHORT).show();
     }
 
-    private static void loadPluginClass(Context context,
-                                        ClassLoader hostClassLoader)
-            throws Exception {
+    private static void loadPluginClass(Context context, ClassLoader hostClassLoader) throws Exception {
         // Step1. 获取到插件apk，通常都是从网络上下载，这里为了演示，直接将插件apk
         // push到手机
         File pluginFile = context.getExternalFilesDir("plugin");
-        String pluginFilePath = "";
+        String pluginFilePath;
         LogUtils.i("Plugin path : " + pluginFile.getAbsolutePath());
         if (pluginFile == null || !pluginFile.exists() || pluginFile.listFiles().length == 0) {
             Toast.makeText(context, "插件文件不存在", Toast.LENGTH_SHORT).show();
@@ -63,18 +60,15 @@ public class DexPluginHelper {
          * 2. 8.0.0 版本之上 optimizedDirectory 已经没有意义,可以定义为null
          */
         LogUtils.i("sdk int : " + Build.VERSION.SDK_INT);
-        DexClassLoader pluginClassLoader = null;
+        DexClassLoader pluginClassLoader;
         if (Build.VERSION.SDK_INT <= 26) {
             File optimizedFile = new File(pluginFilePath + File.separator + "opt");
             if (!optimizedFile.exists()) {
                 optimizedFile.mkdir();
             }
-            pluginClassLoader = new DexClassLoader(pluginFile.getAbsolutePath(),
-                    optimizedFile.getAbsolutePath(),
-                    null, hostClassLoader);
+            pluginClassLoader = new DexClassLoader(pluginFile.getAbsolutePath(), optimizedFile.getAbsolutePath(), null, hostClassLoader);
         } else {
-            pluginClassLoader = new DexClassLoader(pluginFile.getAbsolutePath(), null,
-                    null, hostClassLoader);
+            pluginClassLoader = new DexClassLoader(pluginFile.getAbsolutePath(), null, null, hostClassLoader);
         }
         // Step3. 通过反射获取到pluginClassLoader中的pathList字段
         Object pluginDexPathList = ReflectUtils.getField(BaseDexClassLoader.class, pluginClassLoader, FIELD_PATH_LIST);

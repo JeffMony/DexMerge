@@ -25,11 +25,11 @@ public class InstrumentationProxy extends Instrumentation {
                                             IBinder token, Activity target,
                                             Intent intent, int requestCode,
                                             Bundle options) {
-        List<ResolveInfo> infos =
-                mPackageManager.queryIntentActivities(intent, PackageManager.MATCH_ALL);
+        List<ResolveInfo> infos = mPackageManager.queryIntentActivities(intent, PackageManager.MATCH_ALL);
         if (infos == null || infos.size() == 0) {
             intent.putExtra(HookHelper.TARGET_INTENT, intent.getComponent().getClassName());
-            intent.setClassName(who, "com.vivo.plugin.StubActivity");
+            String pkgName = who.getPackageName();
+            intent.setClassName(who, pkgName + ".StubActivity");
         }
         try {
             Method execMethod = Instrumentation.class.getDeclaredMethod(

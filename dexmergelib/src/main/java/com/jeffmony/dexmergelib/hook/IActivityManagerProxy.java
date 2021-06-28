@@ -28,7 +28,7 @@ public class IActivityManagerProxy implements InvocationHandler {
             }
             intent = (Intent)args[index];
             Intent stubIntent = new Intent();
-            String packageName = "com.vivo.plugin";
+            String packageName = "com.jeffmony.dexmergelib";
             stubIntent.setClassName(packageName, packageName + ".StubActivity");
             stubIntent.putExtra(HookHelper.TARGET_INTENT, intent);
             args[index] = stubIntent;
